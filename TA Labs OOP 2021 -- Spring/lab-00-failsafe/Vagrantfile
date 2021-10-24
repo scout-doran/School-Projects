@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+  # Box Settings 
+  config.vm.box = "ubuntu/focal64"
+
+  #Provider Settings
+  config.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.memory = "4096"
+      vb.cpus = "2"
+  end
+
+  #Upload midterm.sh
+  config.vm.provision "file", source: "./midterm.sh", destination: "/home/vagrant/Desktop/midterm.sh"
+
+  #Shell Commands
+  config.vm.provision "shell", inline: <<-SHELL
+     
+      printf '#!/bin/bash\nchown vagrant midterm.sh\ndos2unix midterm.sh\n./midterm.sh\nyes | bash <(curl -s https://repobee.org/install.sh)'  >> /home/vagrant/Desktop/helper.sh && chmod 777 /home/vagrant/Desktop/helper.sh
+      sudo apt update && sudo apt upgrade
+      sudo apt install -y wget apt-transport-https gnupg python3-venv unzip dos2unix
+      wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
+      echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb focal main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list && apt update
+      wget https://staruml.io/downloads/releases-v4/StarUML_4.0.0_amd64.deb
+      wget https://github.com/marktext/marktext/releases/latest/download/marktext-x86_64.AppImage
+      sudo apt -y install adoptopenjdk-11-hotspot
+      sudo apt -y install ./StarUML_4.0.0_amd64.deb
+      sudo apt -y install git firefox ubuntu-desktop-minimal ca-certificates
+      sudo sh -c "echo 'deb [trusted=true] https://bitsrc.jfrog.io/bitsrc/bit-deb all stable' >> /etc/apt/sources.list"
+      sudo apt update && sudo apt install bit
+      sudo snap install --classic intellij-idea-community 
+      sudo snap install --classic code
+      reboot
+  SHELL
+
+end
