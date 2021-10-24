@@ -1,0 +1,1 @@
+3690,"Nashville International Airport","Nashville","United States","BNA","KBNA",36.1245002746582,-86.6781997680664,599,-6,"A","America/Chicago","airport","OurAirports"
