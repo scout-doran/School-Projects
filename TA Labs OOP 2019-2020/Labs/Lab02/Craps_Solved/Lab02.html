@@ -1,0 +1,234 @@
+<html>
+<head>
+<title>Laboratory 2: Using Objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<link rel="stylesheet" href="../mystyle.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" topmargin="0" marginheight="0" background="images/back.gif" bgproperties="fixed" class="mystyle" link="#333366" vlink="#FF9D3A" alink="#FF9D3A">
+<br>
+
+<b>Laboratory 2: Using Objects</b>
+
+<p>
+
+<a href="../APIdocs/api/index.html">Java API</a><br>
+<a href = "./javadoc/Keyboard/index.html">Keyboard documentation</a><br>
+<a href = "./javadoc/Matrix/index.html">matrix package &quot;external&quot; documentation</a>
+
+<p>
+
+In this lab, you will practice creating/instantiating objects and passing messages to them.
+Four short, unrelated exercises will review basic programming concepts (conditionals and loops)
+and provide substantial practice in using objects.
+<b>You will also become familiar with using the javadoc external documentation format</b>,
+which will be a very valuable skill this semester. 
+
+<p>
+
+<b>Lab:</b><br><br>
+
+     <ul>
+        <li>Matrix Package (reading javadoc documentation)</li>
+        <li>Craps</li>
+        <li>Fallout 3 Strings</li>
+        <li>Priority Queues</li>
+     </ul>
+
+<p>
+<b>Part I: Solving simultaneous equations using the matrix package</b>
+<p>
+
+Download the following file:
+
+<p>
+<b>package matrix</b><br>
+<ul>
+   <li><a href="Lab02/matrix.jar">matrix.jar</a></li>
+   <li><a href="Lab02/make.bat">make.bat</a>  //for those unable to set the PATH and CLASSPATH environment variables</li>
+</ul>
+
+<p>
+
+Consider the following set of equations: <br>
+1.6x<sub>1</sub> + 2.4x<sub>2</sub> - 3.7x<sub>3</sub> = -22.10 <br>
+17.6x<sub>1</sub> - 5.6x<sub>2</sub> + 0.05x<sub>3</sub> = -4.35 <br>
+-2x<sub>1</sub> + 2x<sub>2</sub> + 25.3x<sub>3</sub> = 233.70 <br>
+
+<p>
+
+These equations can be represented in matrix form as Ax = b where A is a 3x3 matrix of the coefficients,
+x is a 3x1 matrix of the unknown values, and b is a 3x1 matrix of the right hand sides (RHS).
+This matrix equation can be inverted to solve for the unknowns, x = A<sup>-1</sup>b.
+
+<p>
+
+Use the matrix package (in the jar file, don't extract the files) 
+and the associated external documentation to solve the above system of equations.
+You will need to use the import statement and -classpath (or -cp) to compile and run
+so that you can access the classes in the jar file.  You may want to consider
+using a batch file to speed up compiling and running with a custom classpath.
+
+<p>
+
+Declare your matrix variables to be type <b>MatrixOperationsInterface</b>.
+
+<p>
+
+Call your driver <b>Equations.java</b>.
+
+<p>
+
+<b>Part II: Computing the percentage of times that craps is rolled</b>
+
+<p>
+
+Download the following files: <br>
+
+<ul>
+   <li><a href="Lab02/SingleDie.class">SingleDie.class</a> //you won't directly use this class, representing a six-sided die</li>
+   <li><a href="Lab02/CrapsDice.class">CrapsDice.class</a> //has the following public interface:</li>
+   <ul>
+      <li>public CrapsDice() //constructor (creates and uses 2 SingleDie objects, this is called composition or <b>has-a</b>)</li>
+      <li>public int roll()  //rolls two SingleDies (six-sided dies) and returns the result</li>
+   </ul>
+</ul>
+
+<p>
+
+Roll the dice 752 times and report the percentage of times that a 2, 3, or 12 is rolled (one number).
+You will need to <b>cast to a double</b> to get the correct percentage (or you will be performing integer division).
+Call your driver class <b>Craps.java</b> and include the following static method: <br>
+
+<ul>
+   <li>public static int playCraps(int numberOfRolls) //returns the number of times that a 2, 3, or 12 is rolled</li>
+</ul>
+
+<p>
+<b>Part III: Using Strings to hack computers in Fallout 3</b>
+<p>
+
+Download the following files:<br>
+
+<ul>
+   <li><a href="Lab02/Password.class">Password.class</a> //has the following public interface:</li>
+   <ul>
+      <li>public Password() //constructor</li>
+      <li>public void addWord(String word)  //add a word to the list of possible passwords</li>
+      <li>public void guess(int tryPassword, int matches) //index in list of possible passwords of attempted word (<b>1-based</b>), number of matches reported</li>
+      <li>public int getNumberOfPasswordsLeft() //returns the number of possible passwords remaining-- when only one password remains, the program terminates</li>
+      <li>public String toString() //display the updated list of possible passwords</li>
+      <li>public String getOriginalWord(int index)  //1-based</li>
+      <li>public String getViableWord(int index)  //1-based</li>
+      <li>public int bestGuess() //returns the index of the word in the <b>original list</b> that should be the next guessed password</li>
+   </ul>
+
+   <li><a href="Lab02/Keyboard.class">Keyboard.class</a> //has the following public interface:</li>
+   <ul>
+      <li>public static int readInt(String prompt)  //static methods are called using the class name</li>
+      <li>public static double readDouble(String prompt)</li>
+      <li>public static String readString(String prompt)</li>
+   </ul>
+</ul>
+
+<p>
+
+In Fallout 3, sometimes it is necessary to hack computers.  
+When hacking is attempted (assuming your science skill is high enough to even attempt the hack), 
+you are given a list of possible passwords.  
+Each time you try a password from the list, either it is the correct password and you are granted access to the computer,
+or you are told how many characters in the attempted word match characters in the actual password.  <b>The character
+and its position in the actual password must match</b>.  
+By a process of elimination, it is then possible to determine the actual password. 
+You have 4 tries to determine the correct password.
+
+<p>
+
+Allow the user to enter possible passwords (<b>Strings</b>) from the Keyboard 
+(refer to the Java API for the String class public interface, look for the &quot;equals&quot; method).  
+The user will enter &quot;q&quot; when they are done
+entering possible passwords.  Next, they will enter which word that they tried as the password, and the number of
+character matches reported by Fallout 3.  The updated list of possible passwords is displayed, and the user is then able
+to guess another password from this updated list.  If only one password remains, the program terminates.
+Your program should be able to handle special cases (i.e. entering &quot;q&quot; right away).
+
+<p>
+
+Call your driver class <b>PasswordDriver.java</b>.  Include the following static methods: <br>
+
+<ul>
+   <li>public static void addWords(?)</li>
+   <li>public static void guessWords(?)</li>
+</ul>
+
+<p>
+
+<img src = "Lab02/lab02.jpg">
+
+<p>
+<b>Part IV: Using a priority queue to sort CDs (heap sort)</b>
+<p>
+
+Download the following file:
+
+<ul>
+   <li><a href="Lab02/CD.class">CD.class</a> //has the following public interface:</li>
+      <ul>
+         <li>public CD (String title, String artist, double value, int tracks)</li>
+         <li>public String toString() //returns the state of the CD as a String</li>
+      </ul>
+</ul>
+
+<p>
+
+Suppose you want to sort a set of CDs (by title).  One possible way to do this is to use a priority queue.
+The &quot;Java Collections Framework&quot; includes a priority queue
+(refer to the Java API for the public interface and look for &quot;offer&quot; and &quot;poll&quot;).  
+You will need to import this class (java.util.PriorityQueue).
+Use this priority queue to sort the CDs listed below.
+That is, put all of the CDs into the priority queue, 
+and then pull them out, calling the toString() method on each CD as
+it comes off of the priority queue.
+As the priority queue is implemented with a heap, you are performing <b>heap sort</b>.  
+<b>Is this sort stable?  How can you tell?</b>
+ 
+<p>
+
+Call your driver <b>PQDriver.java</b> and include the following static methods: <br>
+<ul>
+   <li>public static CD createCD(String title, String artist) //create and return a CD but assign a default value ($14.99) and a default number of tracks (10) to each CD</li>
+   <li>public static void insertCD(PriorityQueue pq, CD cd) //put the CD on the priority queue</li>
+</ul>
+
+<p>
+
+Add the following CDs to the priority queue in the given order (you can copy and paste this code into your main method):
+
+<p>
+
+      insertCD(pq, createCD("The Gallery", "Dark Tranquillity")); <br>
+      insertCD(pq, createCD("Since the Day It All Came Down", "Insomnium")); <br>
+      insertCD(pq, createCD("If Emotions Still Burn", "Ablaze My Sorrow")); <br>
+      insertCD(pq, createCD("Swamplord", "Kalmah")); <br>
+      insertCD(pq, createCD("Towards the Twilight", "Night in Gales"));  <br>
+      insertCD(pq, createCD("An Epic Defiance", "Detonation")); <br>
+      insertCD(pq, createCD("From Your Grave", "The Absence")); <br>
+      insertCD(pq, createCD("Inhumanity", "Mors Principium Est")); <br>
+      insertCD(pq, new CD("The Gallery", "Dark Tranquillity", 13.99, 11));  //a &quot;duplicate&quot; with a different value and tracks  <br>
+      insertCD(pq, createCD("Timeless Departure", "Skyfire")); <br>
+      insertCD(pq, createCD("Spirits and August Light", "Omnium Gatherum")); <br>
+      insertCD(pq, createCD("Slaughter of the Soul", "At the Gates")); <br>
+      insertCD(pq, createCD("Shadows and Dust", "Kataklysm")); <br>
+      insertCD(pq, createCD("Fate of Norns", "Amon Amarth")); <br>
+      insertCD(pq, createCD("Corroding From Inside", "Searing Meadow")); <br>
+      insertCD(pq, createCD("The Glorious Burden", "Iced Earth")); <br>
+      insertCD(pq, createCD("Stained", "Imperanon")); <br>
+      insertCD(pq, createCD("As Night Conquers Day", "Autumn Leaves")); <br>
+
+<br>
+<br>
+<br>
+
+</body>
+</html>
