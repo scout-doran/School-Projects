@@ -1,0 +1,12 @@
+<?= $this->pageTitle("Saved museums"); ?>
+Travis and others can work on this
+
+<?php
+/*	NOTE:
+	Here's an example of a museum generated from the url
+	?fulltext_search=person&property%5B0%5D%5Bjoiner%5D=and&property%5B0%5D%5Bproperty%5D=&property%5B0%5D%5Btype%5D=eq&property%5B0%5D%5Btext%5D=&resource_class_id%5B%5D=&item_set_id%5B%5D=
+	You should be responsible for decoding this museum, saving it into the database as individual componentes, and then rencoding
+	it when a users decides to re-view this museum. Going to a museum should take you to the museum/view?fulltext_search=... route
+	Use $this->params() to get the url parameters and use $this->url() (https://docs.laminas.dev/laminas-view/helpers/url/) to let laminas generate a route.
+*/ 
+?>
