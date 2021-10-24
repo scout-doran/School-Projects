@@ -1,0 +1,166 @@
+<<<<<<< HEAD
+library(readr)
+
+#first load the data sets
+train <- read_csv("train.csv")
+test <- read_csv("test.csv")
+
+#This next section will determine the size of the data
+dim(train)  
+dim(test)
+
+#Train data set has one extra column, called “label”, containing the “digit” that is represented by the other 784 columns. The 784 (28x28 cells) 
+#columns contain a value from 0 to 255. This value tells us the lightness or darkness of each cell. Let’s convert the “label” column to factor:
+train[, 1] <- as.factor(train[, 1]$label)
+
+#All the other columns are numeric:
+head(sapply(train[1,], class))
+
+#some columns contain zero for all observations or they have near zero variance. These columns need to be removed:
+train_orig <- train
+test_orig <- test
+library(caret) 
+nzv.data <- nearZeroVar(train, saveMetrics = TRUE)
+drop.cols <- rownames(nzv.data)[nzv.data$nzv == TRUE]
+train <- train[,!names(train) %in% drop.cols]
+test <- test[,!names(test) %in% drop.cols]
+
+#Now, let’s do some exploratory data analysis.
+#visualization and EDA:
+library(RColorBrewer)
+BNW <- c("white", "black")
+CUSTOM_BNW <- colorRampPalette(colors = BNW)
+
+par(mfrow = c(4, 3), pty = "s", mar = c(1, 1, 1, 1), xaxt = "n", yaxt = "n")
+images_digits_0_9 <- array(dim = c(10, 28 * 28))
+for (digit in 0:9) {
+  images_digits_0_9[digit + 1, ] <- apply(train_orig[train_orig[, 1] == digit, -1], 2, sum)
+  images_digits_0_9[digit + 1, ] <- images_digits_0_9[digit + 1, ]/max(images_digits_0_9[digit + 1, ]) * 255
+  z <- array(images_digits_0_9[digit + 1, ], dim = c(28, 28))
+  z <- z[, 28:1]
+  image(1:28, 1:28, z, main = digit, col = CUSTOM_BNW(256))
+}
+#More blurriness, more chance of misprediction. For example, 0 has a smooth and fully dark line but see how blurry is 9 or 4 or even 1.
+#That means there is a higher chance of incorrect prediction of such numbers. We will explore this more in detail when we predict our validation data set.
+
+CUSTOM_BNW_PLOT <- colorRampPalette(brewer.pal(10, "Set3"))
+LabTable <- table(train_orig$label)
+par(mfrow = c(1, 1))
+percentage <- round(LabTable/sum(LabTable) * 100)
+labels <- paste0(row.names(LabTable), " (", percentage, "%) ")
+pie(LabTable, labels = labels, col = CUSTOM_BNW_PLOT(10), main = "Percentage of Digits (Training Set)")
+
+#So, all digits contribute almost equally to the data set implying that the train set is appropriately randomly selected.
+set.seed(43210)
+trainIndex <- createDataPartition(train$label, p = 0.1, list = FALSE, times = 1)
+allindices <- c(1:42000)
+training <- train[trainIndex,]
+validating <- train[-trainIndex,]
+vali0_index <- allindices[! allindices %in% trainIndex]
+validIndex <- createDataPartition(validating$label, p = 0.11, list = FALSE, times = 1)
+validating <- validating[validIndex,]
+original_validindex <- vali0_index[validIndex]
+
+
+
+#The K-Nearest Neighbor (KNN) is a simple yet accurate algorithm to solve the Digit Recognition problem. For predicting a new instance, KNN calculates the Euclidean Distance between the new instance and all the instances in the entire training set. Then, the algorithm looks for the top K nearest (most similar) instances and outputs the class with the highest frequency (most vote) as prediction. The question is how to choose K? Cross Validation can be used to choose the best value for K that results in the highest accuracy. I use CARET package to train KNN and choose K. Then, I will switch to FNN which is much faster.
+library(doParallel)
+registerDoParallel(3)
+ctrl <- trainControl(method="repeatedcv",repeats = 1, number = 4, verboseIter = T, allowParallel = T)
+knnFit <- train(label ~ ., data = training, method = "knn", trControl = ctrl)
+#plot(knnFit)
+
+#So, we choose K=5. At first, FNN will be trained with three training sets: 1) original “training” 2) “training2” (lower contrast) 3) “training3” (higher contrast). See the FNN documentation for different “algorithm” options and other settings. I found that “kd-tree” was the best choice.
+library(FNN)
+fnn.kd1 <- FNN::knn(training[,-1], validating[,-1], training$label, k=5, algorithm = c("kd_tree"))
+fnn.kd.pred1 <- as.numeric(fnn.kd1)-1
+fnn.kd.pred1 <- as.factor(fnn.kd.pred1)
+confusionMatrix(fnn.kd.pred1, validating$label)
+#fnn.kd2 <- FNN::knn(training2[,-1], validating2[,-1], training2$label, k=5, algorithm = c("kd_tree"))
+#fnn.kd.pred2 <- as.numeric(fnn.kd2)-1
+#fnn.kd3 <- FNN::knn(training3[,-1], validating3[,-1], training3$label, k=5, algorithm = c("kd_tree"))
+#fnn.kd.pred3 <- as.numeric(fnn.kd3)-1
+=======
+library(readr)
+
+#Load the data sets
+train <- read_csv("train.csv")
+test <- read_csv("test.csv")
+
+#determine the size of the data using dim
+dim(train)  
+dim(test)
+
+#Label column in the Train data set contains a value from 0 to 255 which tells us how light or dark the cell will be  
+#factor Label column
+train[, 1] <- as.factor(train[, 1]$label)
+#Other columns as numeric
+head(sapply(train[1,], class))
+
+#remove columns that contain 0 using drop
+train_orig <- train
+test_orig <- test
+library(caret) 
+nzv.data <- nearZeroVar(train, saveMetrics = TRUE)
+drop.cols <- rownames(nzv.data)[nzv.data$nzv == TRUE]
+train <- train[,!names(train) %in% drop.cols]
+test <- test[,!names(test) %in% drop.cols]
+
+#Visualization and EDA
+library(RColorBrewer)
+BNW <- c("white", "black")
+CUSTOM_BNW <- colorRampPalette(colors = BNW)
+
+par(mfrow = c(4, 3), pty = "s", mar = c(1, 1, 1, 1), xaxt = "n", yaxt = "n")
+images_digits_0_9 <- array(dim = c(10, 28 * 28))
+for (digit in 0:9) {
+  images_digits_0_9[digit + 1, ] <- apply(train_orig[train_orig[, 1] == digit, -1], 2, sum)
+  images_digits_0_9[digit + 1, ] <- images_digits_0_9[digit + 1, ]/max(images_digits_0_9[digit + 1, ]) * 255
+  z <- array(images_digits_0_9[digit + 1, ], dim = c(28, 28))
+  z <- z[, 28:1]
+  image(1:28, 1:28, z, main = digit, col = CUSTOM_BNW(256))
+}
+
+CUSTOM_BNW_PLOT <- colorRampPalette(brewer.pal(10, "Set3"))
+LabTable <- table(train_orig$label)
+par(mfrow = c(1, 1))
+percentage <- round(LabTable/sum(LabTable) * 100)
+labels <- paste0(row.names(LabTable), " (", percentage, "%) ")
+#CHANGE TO HISTOGRAM OR BARPLOT!!!!!
+pie(LabTable, labels = labels, col = CUSTOM_BNW_PLOT(10), main = "Percentage of Digits (Training Set)")
+barplot(height=train$pixel0, names=train$label)
+
+
+#So, all digits contribute almost equally to the data set implying that the train set is appropriately randomly selected.
+set.seed(43210)
+trainIndex <- createDataPartition(train$label, p = 0.1, list = FALSE, times = 1)
+allindices <- c(1:42000)
+training <- train[trainIndex,]
+validating <- train[-trainIndex,]
+vali0_index <- allindices[! allindices %in% trainIndex]
+validIndex <- createDataPartition(validating$label, p = 0.11, list = FALSE, times = 1)
+validating <- validating[validIndex,]
+original_validindex <- vali0_index[validIndex]
+
+
+
+library(doParallel)
+registerDoParallel(3)
+ctrl <- trainControl(method="repeatedcv",repeats = 1, number = 4, verboseIter = T, allowParallel = T)
+knnFit <- train(label ~ ., data = training, method = "knn", trControl = ctrl)
+#plot(knnFit)
+
+#So, we choose K=5. At first, FNN will be trained with three training sets: 1) original “training” 2) “training2” (lower contrast) 3) “training3” (higher contrast). See the FNN documentation for different “algorithm” options and other settings. I found that “kd-tree” was the best choice.
+library(FNN)
+fnn.kd1 <- FNN::knn(training[,-1], validating[,-1], training$label, k=5, algorithm = c("kd_tree"))
+fnn.kd.pred1 <- as.numeric(fnn.kd1)-1
+fnn.kd.pred1 <- as.factor(fnn.kd.pred1)
+#Modified code vvvvvv
+cm <- confusionMatrix(fnn.kd.pred1, validating$label)
+str(cm)
+
+#fnn.kd2 <- FNN::knn(training2[,-1], validating2[,-1], training2$label, k=5, algorithm = c("kd_tree"))
+#fnn.kd.pred2 <- as.numeric(fnn.kd2)-1
+#fnn.kd3 <- FNN::knn(training3[,-1], validating3[,-1], training3$label, k=5, algorithm = c("kd_tree"))
+#fnn.kd.pred3 <- as.numeric(fnn.kd3)-1
+>>>>>>> 7a73466cad5e2cdfbba81121e380314e2e45e2c4
