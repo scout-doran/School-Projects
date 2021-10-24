@@ -1,0 +1,221 @@
+<html>
+<head>
+<title>Laboratory 13: Law of Demeter</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<link rel="stylesheet" href="../mystyle.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" topmargin="0" marginheight="0" background="images/back.gif" bgproperties="fixed" class="mystyle" link="#333366" vlink="#FF9D3A" alink="#FF9D3A">
+<br>
+
+<b>Laboratory 13: Law of Demeter</b>
+
+<p>
+<a href="../APIdocs/api/index.html">Java API</a><br>
+<a href="javadoc/EasyGridBag/index.html">Javadoc for EasyGridBag</a><br>
+<p>
+
+In this lab, you will be designing and implementing the model portion of the Model-View-Controller
+design pattern.  You will need a set of classes (a model) to allow the LabManager GUI to track
+the progress of CSC 2121 lab students throughout the semester.  
+
+<p>
+
+The number of CSC 2121 sections that the LabManager will be working with is specified in the main method.
+In this lab, there will be two sections.
+Each section will have a different number of students, with the data for each section read in from
+and stored to a separate text file.  The text file will store (in a comma delimited file)
+student ID, student name, lab grade and partner ID for each completed lab (14 total).
+A student is assigned a random partner each lab period.
+An odd number of students present for a given lab will result in one randomly chosen student 
+as their own partner.
+If a student is present for the lab and works on the lab with their partner for the entire
+class, that student (and partner) receives a default 'D' for the lab, 
+even if the lab is not complete or has several major issues.  
+Completion of the lab before the final due date specified in the syllabus results in an A, B, C, or D
+depending on how many major or minor issues are still present in the final lab submission.  
+
+<p>
+
+From the CSC 2121 syllabus:<br>
+
+<p>
+
+Interpreting your ilearn grade:<br>
+<ul>
+   <li>A: lab completed with no issues (1.00 points)</li>
+   <li>B: lab completed with a few minor issues (0.75 points)</li>
+   <li>C: lab completed with a few major issues (0.50 points)</li>
+   <li>D: lab not completed or several major issues (0.25 points)</li>
+   <li>F: lab not attended or not working with partner (0.00 points)</li>
+   <ul>  
+      <li><b>if you have 2 or more Fs, you cannot pass lab</b></li>
+   </ul>
+</ul>
+
+<p>
+
+Final Grade:<br>
+<ul>
+   <li>A: >= 13.25 points</li>
+   <li>B: >= 11.00 points</li>
+   <li>C: >= 8.50 points</li>
+   <li>D: >= 4.50 points</li>
+</ul>
+
+<p>
+
+<b>Lab:</b>
+
+<p>
+
+     <ul>
+        <li><b>Model</b>-View-Controller Design Pattern</li>
+        <li>Class Cohesion and Separation of Responsibilities</li>
+        <li>Complete and Consistent Protocol</li>
+        <li>Law of Demeter</li>
+        <li>Expert Pattern</li>
+     </ul>
+
+<p>
+
+<b>Part I: Class Cohesion and Separation of Responsibilities</b>
+
+<p>
+
+Most of the work for the actual GUI has been completed for you.  Thus, your model
+must interface with the GUI using the protocol listed in Part II.
+This means that your model will include, at a minimum, a <b>Sections</b> class.
+
+<p>
+
+Try to determine what minimal set of classes that you need to perform the duties described 
+at the top of the lab.
+You are only concerned with the classes required to store the data (the model), not the GUI.
+Remember that classes have knowing, doing, or controlling responsibilities (separation of
+responsibilities).  The Expert
+pattern also suggests that classes responsible for knowing data should manipulate it (so
+some classes may have both knowing and doing responsibilities).
+Make sure that you adhere to the <b>Law of Demeter</b> in your design, and consider
+any additional classes that may be needed for proper class cohesion.
+
+<p>
+
+Before looking at my starting classes below,
+draw a UML diagram of your design, showing class relationships and instance variables (you may omit methods).
+
+<p>
+
+Download the following files: <br>
+<ul>
+   <li><a href = "Lab13/Random.java">Random.java</a>  //no work</li>
+   <li><a href = "Lab13/Lab.java">Lab.java</a>  //no work</li>
+   <li><a href = "Lab13/Labs.java">Labs.java</a>  //no work</li>
+
+   <li><a href = "Lab13/Student.java">Student.java</a></li>
+   <li><a href = "Lab13/Students.java">Students.java</a></li>
+   <li><a href = "Lab13/Section.java">Section.java</a></li>
+   <li><a href = "Lab13/Sections.java">Sections.java</a></li>
+</ul>
+
+<p>
+
+Compare your UML diagram to the above classes.  Is your design more elegant or less elegant?
+Argue for or against a different number of classes in your model hierarchy on your UML diagram.
+
+<p>
+
+<b>Part II: Model and Law of Demeter</b>
+
+<p>
+
+Using the classes provided in the previous part,
+implement the following public interface for a <b>Sections</b> 
+class so that it can interact with the GUI (<b>some of these methods may have been completed for you</b>):
+
+<p>
+
+<ul>
+   <li>Sections(int num_sections, double[] grade_constants, int total_num_labs) //constructor</li>
+
+   <li>int getNumSections()</li>
+   <li>int getNumStudents(int sectionID)  //the number of students in a given section</li>
+   <li>int getNumLabs(int sectionID)  //the number of labs completed by the class for a given section</li>
+   <li>int getNumLabs(int sectionID, int studentID)  //the number of labs completed by an individual student</li>
+   <li>int getPartnerID(int sectionID, int studentID, int labID)  //a student's partner for a given lab (note consistent parameter ordering)</li>
+   <li>String getStudentName(int sectionID, int studentID)</li>
+   <li>boolean isPresent(int sectionID, int studentID, int labID)</li>
+
+   <li>String studentInfo(int sectionID, int studentID) //all lab grades for a single student (used in top text box in GUI)</li>
+   <li>String partnerList(int sectionID, int labID)  //list of partners for the requested lab</li>
+   <li>void computePartners(int sectionID)  //randomly assign partners for the lab</li>
+
+   <li>boolean isActive(int sectionID, int studentID)  //is student still in the class?</li>
+   <li>void setInactive(int sectionID, int studentID)  //student has withdrawn</li>
+   <li>void setNotPresent(int sectionID, int studentID, int labID)  //student absent for lab (simply set the lab grade to F)</li>
+   <li>void setGrade(int sectionID, int studentID, int labID, char grade)  //update the student's grade for the lab (and partner's)</li>
+
+   <li>void addLab(int sectionID)  //starting a new lab</li>
+   <li>void writeFiles()</li>
+
+   <li><b>can you identify any additional essential methods to form a complete protocol?</b></li>
+   <li><b>add at least one convenience method (calls essential methods to perform a task)</b></li>
+</ul>
+
+<b>Note: IDs passed as parameters are 1-based!</b>
+
+<p>
+
+Note that the method signatures (studentID and labID passed as parameters with a consistent ordering) 
+imply that the Law of Demeter is followed by the GUI.  That is, instead of obtaining a reference
+to a student and then obtaining a reference to a particular lab, the GUI passes the student and lab IDs
+as parameters, and lets the classes that control the relevant data handle the request.
+
+<p>
+
+Even though the GUI
+uses defensive programming before calling the above methods, your methods should
+check that the parameters are valid (preconditions are met) before proceeding.
+To save time, you may use simple error checking (error codes or default values) rather
+than exception handling.  Methods that have several parameters should have their parameters
+verified in different classes.
+
+<p>
+
+<center><img src = "Lab13/lab13.jpg"></center>
+
+<p>
+
+<b>Part III: View-Controller</b>
+
+<p>
+
+Identify the view and controller portions of the M-V-C design pattern.
+Note how the controller is registered with the view (Observer design pattern).
+
+<p>
+
+<b>Complete the processGrade method</b>.  To correctly set a grade,
+both the student selected and their partner must have the grade set.
+
+<p>
+
+Download the following files: <br>
+<ul>
+   <li><a href = "Lab13/LabManagerDriver.java">LabManagerDriver.java</a></li>
+   <li><a href = "Lab13/LabManagerView.java">LabManagerView.java</a></li>
+   <li><a href = "Lab13/EasyGridBag.java">EasyGridBag.java</a></li>
+   <li><a href = "Lab13/CenterFrame.java">CenterFrame.java</a></li>
+   <li><a href = "Lab13/section1.txt">section1.txt</a></li>
+   <li><a href = "Lab13/section2.txt">section2.txt</a></li>
+</ul>
+
+<p>
+
+<br>
+<br>
+<br>
+
+</body>
+</html>
