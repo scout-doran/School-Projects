@@ -1,0 +1,18 @@
+Difficulty: 6
+Target hash: 000000
+Current hash: 4f68e5cdb14b4c72274aa275a4d37ee7fcb73c332bf94d167f1aecacba00c8d0
+Total Time: 0 minute(s) 7.145698 seconds
+
+Transactions: 
+1. Choose: Choose:  BTC
+2. Choose: Choose:  BTC
+3. Choose: Choose:  BTC
+4. Choose: Choose:  BTC
+
+
+Hashed Transactions: 
+357987a294cacaa49f5f8988ccf7fcce00ffb413a1109589a173739d8e8c60df
+691f58ca548943313de663c23a97741637748d9fa53b31294049e63432540cf5
+a75c604a10c7caa8879c10df1892946c7b3e1d0b3f9606e464a91d3fe49da4e4
+0e1099cf7d3bbd0ec7f082eeedfe247281ce817ebbb8e98dee9bec95d45fdbaf
+
