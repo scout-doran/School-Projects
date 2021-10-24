@@ -1,0 +1,51 @@
+//individual toppings and a collection of toppings in the same class
+public enum Topping
+{
+   nuts(0.15), m_and_ms(0.15), hot_fudge(0.15), oreo_cookies(0.15), no_topping(0.00);
+
+   private final double toppingCost;  
+
+   private static final Topping[] toppings = Topping.values();
+   private static final int numToppings = toppings.length;
+
+   private Topping(double cost) 
+   {
+      toppingCost = cost;
+   }
+
+   public double price()
+   {
+      return toppingCost;
+   }
+
+   public static int numberOfToppings()
+   {
+      return numToppings;
+   }
+
+   public static String listToppings()
+   {
+      int index = 1;
+
+      //loop through the enumeration, listing the flavors
+      String temp = "";
+
+      for (Topping top : toppings)
+      {
+         temp += index + ". " + top.toString() +  "\r\n";
+         index++;
+      }
+
+      return temp;
+   }
+
+   public static Topping getTopping(int index)  //1-based
+   {
+      if (index < 1 || index > numToppings)
+      {
+         index = 1;
+      }
+
+      return toppings[index - 1];
+   }
+}
