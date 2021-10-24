@@ -1,0 +1,735 @@
+Microsoft (R) Macro Assembler Version 6.15.8803		    11/05/20 10:10:28
+camera_template.asm					     Page 1 - 1
+
+
+
+				.386
+
+				.MODEL FLAT
+
+				ExitProcess PROTO NEAR32 stdcall, dwExitCode:DWORD
+
+				INCLUDE debug.h
+			      C INCLUDE io.h
+			      C ; IO.H -- header file for I/O macros
+			      C ; 32-bit version for flat memory model
+			      C ; R. Detmer   last revised 8/2000
+			      C .NOLIST     ; turn off listing
+			      C .LIST        ; begin listing
+			      C 
+			      C 
+ = 0000000D		      C CR          EQU    0Dh   ; carriage return character
+ = 0000000A		      C LF          EQU    0Ah   ; linefeed character
+			      C 
+ 00000000		      C .DATA
+ 00000000 0D 0A 00	      C carriage    BYTE     CR, LF, 0
+ 00000003  0000000D [	      C text        BYTE     13 DUP(?)
+	    00
+	   ]
+			      C 
+			      C outputW    	MACRO   var
+			      C                    itoa text, var
+			      C                    output text
+			      C                    output carriage
+			      C                 ENDM
+			      C 
+			      C outputD  	MACRO  var
+			      C                    dtoa text, var
+			      C                    output text
+			      C                    output carriage
+			      C          	ENDM
+			      C 
+			      C inputW          MACRO  prompt, location
+			      C                    output prompt
+			      C                    input text, 8
+			      C                    atoi text
+			      C                    mov location, ax
+			      C                 ENDM
+			      C 
+			      C inputD          MACRO  prompt, location
+			      C                    output prompt
+			      C                    input text, 13
+			      C                    atod text
+			      C                    mov location, eax
+			      C                 ENDM
+			      C 
+				INCLUDE sqrt.h
+			      C .NOLIST     ; turn off listing
+			      C .LIST       
+			      C 
+				INCLUDE io.h
+			      C ; IO.H -- header file for I/O macros
+			      C ; 32-bit version for flat memory model
+			      C ; R. Detmer   last revised 8/2000
+			      C .NOLIST     ; turn off listing
+			      C .LIST        ; begin listing
+			      C 
+
+				.STACK  4096           
+
+ 00000010			.DATA                   
+
+				; declare these first so that they are all on WORD boundaries
+
+ 00000010 0000			eye_x       WORD    ?
+ 00000012 0000			eye_y       WORD    ?
+ 00000014 0000			eye_z       WORD    ?
+
+ 00000016 45 6E 74 65 72	eyexprompt      BYTE    "Enter the x-coordinate of the camera eyepoint:  ", 0
+	   20 74 68 65 20
+	   78 2D 63 6F 6F
+	   72 64 69 6E 61
+	   74 65 20 6F 66
+	   20 74 68 65 20
+	   63 61 6D 65 72
+	   61 20 65 79 65
+	   70 6F 69 6E 74
+	   3A 20 20 00
+ 00000047 45 6E 74 65 72	eyeyprompt      BYTE    "Enter the y-coordinate of the camera eyepoint:  ", 0
+	   20 74 68 65 20
+	   79 2D 63 6F 6F
+	   72 64 69 6E 61
+	   74 65 20 6F 66
+	   20 74 68 65 20
+	   63 61 6D 65 72
+	   61 20 65 79 65
+	   70 6F 69 6E 74
+	   3A 20 20 00
+ 00000078 45 6E 74 65 72	eyezprompt      BYTE    "Enter the z-coordinate of the camera eyepoint:  ", 0
+	   20 74 68 65 20
+	   7A 2D 63 6F 6F
+	   72 64 69 6E 61
+	   74 65 20 6F 66
+	   20 74 68 65 20
+	   63 61 6D 65 72
+	   61 20 65 79 65
+	   70 6F 69 6E 74
+	   3A 20 20 00
+
+				eyexprompt      BYTE    "Enter the x-coordinate of camera look at point:  ", 0
+camera_template.asm(26) : error A2005: symbol redefinition : eyexprompt
+				eyeyprompt      BYTE    "Enter the y-coordinate of camera look at point:  ", 0
+camera_template.asm(27) : error A2005: symbol redefinition : eyeyprompt
+				eyezprompt      BYTE    "Enter the z-coordinate of camera look at point:  ", 0
+camera_template.asm(28) : error A2005: symbol redefinition : eyezprompt
+
+				eyexprompt      BYTE    "Enter the x-coordinate of the camera eyepoint:  ", 0
+camera_template.asm(30) : error A2005: symbol redefinition : eyexprompt
+				eyeyprompt      BYTE    "Enter the y-coordinate of the camera eyepoint:  ", 0
+camera_template.asm(31) : error A2005: symbol redefinition : eyeyprompt
+				eyezprompt      BYTE    "Enter the z-coordinate of the camera eyepoint:  ", 0
+camera_template.asm(32) : error A2005: symbol redefinition : eyezprompt
+
+ 000000A9  00000032 [		display         		BYTE    50 DUP (?), 0 ; the text to display in (x, y, z) format
+	    00
+	   ] 00
+ 000000DC 75 3A 20 00		output_u        	BYTE    "u: ", 0
+ 000000E0 76 3A 20 00		output_v        	BYTE    "v: ", 0
+ 000000E4 6E 3A 20 00		output_n        	BYTE    "n: ", 0
+
+ 000000E8 0D 0A 00		eol             		BYTE    CR, LF, 0     ; end of line
+
+				-----------------------------------------------------------------------------------------------
+camera_template.asm(41) : error A2008: syntax error : -
+				; TO DO  // define all relevant variables
+				-----------------------------------------------------------------------------------------------
+camera_template.asm(43) : error A2008: syntax error : -
+
+ 000000EB 0000			atPoint_x  WORD  ?      ;get_and_display variables
+ 000000ED 0000			atPoint_y  WORD  ?      ;get_and_display variables
+ 000000EF 0000			atPoint_z  WORD  ?      ;get_and_display variables
+
+ 000000F1 0000			up_x  WORD  ?    ;get_and_display variables
+ 000000F3 0000			up_y  WORD  ?    ;get_and_display variables
+ 000000F5 0000			up_z  WORD  ?    ;get_and_display variables
+
+ 000000F7 0000			compute_n_x  WORD  ?    ;gets the sum to subtract and compute n
+ 000000F9 0000			compute_n_y  WORD  ?    ;gets the sum to subtract and compute n
+ 000000FB 0000			compute_n_z  WORD  ?    ;gets the sum to subtract and compute n
+
+ 000000FD 0000			ndotn  WORD  ?          ;define ndotn
+ 000000FF 0000			vdot  WORD  ?           ;variable for v
+
+ 00000101 0000			coordinate1  WORD  ?    ;new coordinates
+ 00000103 0000			coordinate2  WORD  ?    ;new coordinates
+ 00000105 0000			coordinate3  WORD  ?    ;new coordinates
+
+ 00000107 0000			u_x  WORD  ?    ;
+ 00000109 0000			u_y  WORD  ?    ;
+ 0000010B 0000			u_z  WORD  ?    ;
+
+ 0000010D 0000			length_u  WORD  ?    ;gets the length
+ 0000010F 0000			length_v  WORD  ?    ;gets the length
+ 00000111 0000			length_n  WORD  ?    ;gets the length
+
+ 00000000			.CODE          
+
+				getCoord    MACRO   prompt, var
+				               inputW  prompt, var
+				               mov     var, ax         ; store the result in memory
+				               outputW ax
+				            ENDM
+
+
+				get_and_display MACRO prompt1, prompt2, prompt3, prompt4, x1, x2, x3
+				                  getCoord prompt1, x1       
+				                  ;TO DO rest of relevant statements
+				                  getCoord prompt2, x2
+						  getCoord prompt3, x3		  
+
+				                  printPoint prompt4, x1, x2, x3  
+				                ENDM                            
+
+				;Remember that to do output a word without using debug.h it has to be turned into a byte array using itoa
+				printPoint  MACRO   point, xvar, yvar, zvar
+				               output eol
+				               mov     point, "("
+				               itoa    point + 1, xvar ; convert xvar to digits and place after the "("
+				               mov     point + 7, ","  ; insert the comma after the digits for xvar
+				-----------------------------------------------------------------------------------------------
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+				               itoa    point + 8, yvar 
+				               mov     point + 14, ","  
+
+				               itoa    point + 15, zvar
+				               mov     point + 21, ")"
+				               output point		   
+							   
+							   
+				            ENDM
+
+				; This will use the vector length macro. The square root of the dot product is
+				;  equal to the length of the vector and to normalize each part of the coordinate will be divided
+				;  by the length. {x1 / length, y1 / length, z1 / length}
+				printNormPoint  MACRO   point, xvar, yvar, zvar, len
+				               itoa point + 5, len
+				               itoa point + 16, len
+				               itoa point + 27, len
+
+				               output eol
+				               mov     point + 0, "("
+
+				               itoa    point + 1, xvar  
+				               mov     point + 7, "/"  
+				               mov     point + 11, ","
+				-----------------------------------------------------------------------------------------------
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+					       itoa    point + 12, yvar
+				               mov     point + 18, "/"
+				               mov     point + 22, ","
+				               
+				               itoa    point + 23, zvar
+				               mov     point + 29, "/"
+				               mov     point + 33, ","
+					       		   
+				               output  point
+				               output  eol
+				            ENDM
+
+				; computes the dot product of two vectors
+				;  (x1 * x2) + (y1 * y2) + (z1 * z2)
+				dot_product MACRO   x1, y1, z1, x2, y2, z2
+				               mov ax, x1
+				               mov bx, x2
+				               imul bx        ; x1 * x2 is in ax  (actually dx::ax, high order bits dropped)
+				               mov cx, ax     ; the accumulating result will be in cx
+				-----------------------------------------------------------------------------------------------
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+				               mov ax, y1
+				               mov bx, y2
+				               imul bx        ; y1 * y2 is in ax  (actually dx::ax, high order bits dropped)
+				               mov bx, ax     
+				               add cx, bx     ; ADD BX TO CX 
+				               
+				               mov ax, z1
+				               mov bx, z2
+				               imul bx        ; z1 * z2 is in ax  (actually dx::ax, high order bits dropped)
+				               add ax, cx     ; ADD CX TO AX  
+				               mov cx, ax
+				            ENDM
+
+				; computes the cross product of two vectors
+				;   a x b (a cross b) =
+				;    (a_y * b_z) - (a_z * b_y) (the first component (x) of a x b)
+				;    (a_z * b_x) - (a_x * b_z) (the second component (y) of a x b)
+				;    (a_x * b_y) - (a_y * b_x) (the third component (Z) of a x b)
+				cross_product MACRO   x1, y1, z1, x2, y2, z2, x3, y3, z3
+				        ;(y1*z2) - (z1*y2)
+				               mov ax, y1
+				               mov bx, z2
+				               mul bx         ; result in dx::ax
+				               mov cx, ax
+
+				               mov ax, z1     
+				               mov bx, y2
+				               mul bx         ; result in dx::ax
+				               neg ax
+
+				               add ax, cx
+				               mov x3, ax
+				-----------------------------------------------------------------------------------------------
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+				        ;(z1 * x2) - (x1 * z2)
+				               mov ax, z1
+				               mov bx, x2
+				               mul bx
+				               mov cx, ax 
+				               
+				               mov ax, x1
+				               mov bx, z2
+				               mul bx
+				               neg ax
+				               
+				               add ax, cx
+				               mov y3, ax
+				        ;(x1 * y2) - (y1 * x2)
+				               mov ax, x1
+				               mov bx, y2
+				               mul bx
+				               mov cx, ax 
+				               
+				               mov ax, y1
+				               mov bx, x2
+				               mul bx
+				               neg ax
+				               
+				               add ax, cx
+				               mov z3, ax
+				            ENDM
+
+				; performs point-point subtraction to obtain a vector
+				; coordinate_1 – coordinate_2 = { x1 – x2, y1 – y2, z1 - z2 }
+				point_subtract MACRO x1, y1, z1, x2, y2, z2, vx, vy, vz
+				                  mov ax, x1
+				                  mov bx, x2
+				                  sub ax, bx
+				                  mov vx, ax
+				-----------------------------------------------------------------------------------------------
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+				                  mov ax, y1
+				                  mov bx, y2
+				                  sub ax, bx
+				                  mov vy, ax
+
+				                  mov ax, z1
+				                  mov bx, z2
+				                  sub ax, bx
+				                  mov vz, ax		  
+								  
+				               ENDM
+
+				; performs point-vector addition to obtain a new point
+				; coordinate_1 + coordinate_2 = { x1 + x2, y1 + y2, z1 + z2 }
+				point_vector_add MACRO x, y, z, vx, vy, vz, xn, yn, zn
+				                  mov ax, x
+				                  mov bx, vx
+				                  add ax, bx
+				                  mov xn, ax
+				-----------------------------------------------------------------------------------------------
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+				                  mov ax, y
+				                  mov bx, vy
+				                  add ax, bx
+				                  mov yn, ax
+
+				                  mov ax, z
+				                  mov bx, vz
+				                  add ax, bx
+				                  mov zn, ax
+				                  
+				               ENDM
+
+
+								  
+				; This macro will use the dot product to find the vector length. 
+				; The vector length is the square root of the dot product				  
+				vector_length	MACRO x, y, z	   
+				-----------------------------------------------------------------------------------------------
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+					           dot_product x,y,z,x,y,z         ; sqaure root is returned in ax    		   
+						   sqrt cx		   
+				                ENDM
+
+
+
+
+
+
+ 00000000			_start:
+ 00000000			          ;inputW stands for input word
+				          ;outputW stands for output word
+					  inputW  eyexprompt, eye_x
+				          outputW ax
+
+				          inputW  eyeyprompt, eye_y
+				          outputW ax 
+
+				          inputW  eyexprompt, eye_z
+				          outputW ax
+				   
+				   
+					  inputW  eyexprompt, eye_x
+				          outputW ax
+
+				          inputW  eyeyprompt, eye_y
+				          outputW ax 
+
+				          inputW  eyexprompt, eye_z
+				          outputW ax
+				   
+					  inputW  eyexprompt, eye_x
+				          outputW ax
+
+				          inputW  eyeyprompt, eye_y
+				          outputW ax 
+
+				          inputW  eyexprompt, eye_z
+				          outputW ax
+				          
+				          get_and_display eyexprompt, eyeyprompt, eyezprompt, display, eye_x, eye_y, eye_z      ; location of the camera in world coordinates 
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(303) : error A2008: syntax error : -
+ printPoint(5): Macro Called From
+  get_and_display(6): Macro Called From
+   camera_template.asm(303): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(303) : error A2008: syntax error : -
+ printPoint(7): Macro Called From
+  get_and_display(6): Macro Called From
+   camera_template.asm(303): Main Line Code
+				          ;output eol
+				          get_and_display eyexprompt, eyeyprompt, eyezprompt, display, atPoint_x, atPoint_y, atPoint_z  ; location that the came is pointed at
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(305) : error A2008: syntax error : -
+ printPoint(5): Macro Called From
+  get_and_display(6): Macro Called From
+   camera_template.asm(305): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(305) : error A2008: syntax error : -
+ printPoint(7): Macro Called From
+  get_and_display(6): Macro Called From
+   camera_template.asm(305): Main Line Code
+				          ;output eol
+				          get_and_display eyexprompt, eyeyprompt, eyezprompt, display, up_x, up_y, up_z         ; direction is up for the camera
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(307) : error A2008: syntax error : -
+ printPoint(5): Macro Called From
+  get_and_display(6): Macro Called From
+   camera_template.asm(307): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(307) : error A2008: syntax error : -
+ printPoint(7): Macro Called From
+  get_and_display(6): Macro Called From
+   camera_template.asm(307): Main Line Code
+				          ;output eol
+
+				-----------------------------------------------------------------------------------------------
+camera_template.asm(310) : error A2008: syntax error : -
+				; TO DO  // rest of the relevant statements
+				-----------------------------------------------------------------------------------------------
+camera_template.asm(312) : error A2008: syntax error : -
+				          ; calculate n 
+				          ;  subtract the at point from the eye point (E - A) coordinate by coordinate
+				          point_subtract eye_x, eye_y, eye_z, atPoint_x, atPoint_y, atPoint_z, compute_n_x, compute_n_y, compute_n_z 
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(315) : error A2008: syntax error : -
+ point_subtract(5): Macro Called From
+  camera_template.asm(315): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(315) : error A2008: syntax error : -
+ point_subtract(7): Macro Called From
+  camera_template.asm(315): Main Line Code
+				                    
+				          ; define ndotn
+				          dot_product compute_n_x, compute_n_y, compute_n_z, compute_n_x, compute_n_y, compute_n_z
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(318) : error A2008: syntax error : -
+ dot_product(5): Macro Called From
+  camera_template.asm(318): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(318) : error A2008: syntax error : -
+ dot_product(7): Macro Called From
+  camera_template.asm(318): Main Line Code
+ 00000948  66| 89 0D		          mov ndotn, cx
+	   000000FD R
+
+				          ; find (n.n)v = -(vup.n)n + (n.n)vup    
+				          ; compute (n.n)vup
+ 0000094F  66| A1		          mov ax, ndotn
+	   000000FD R
+ 00000955  66| 8B 1D		          mov bx, up_x
+	   000000F1 R
+ 0000095C  66| F7 EB		          imul bx
+ 0000095F  66| 01 05		          add coordinate1, ax
+	   00000101 R
+ 00000966  66| A1		          mov ax, ndotn
+	   000000FD R
+ 0000096C  66| 8B 1D		          mov bx, up_y
+	   000000F3 R
+ 00000973  66| F7 EB		          imul bx
+ 00000976  66| 01 05		          add coordinate2, ax
+	   00000103 R
+ 0000097D  66| A1		          mov ax, ndotn
+	   000000FD R
+ 00000983  66| 8B 1D		          mov bx, up_z
+	   000000F5 R
+ 0000098A  66| F7 EB		          imul bx
+ 0000098D  66| 01 05		          add coordinate3, ax
+	   00000105 R
+				          ; compute -(vup.n)n and add to previous
+				          dot_product up_x, up_y, up_z, compute_n_x, compute_n_y, compute_n_z
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(336) : error A2008: syntax error : -
+ dot_product(5): Macro Called From
+  camera_template.asm(336): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(336) : error A2008: syntax error : -
+ dot_product(7): Macro Called From
+  camera_template.asm(336): Main Line Code
+ 000009D3  66| 89 0D		          mov vdot, cx
+	   000000FF R
+ 000009DA  66| F7 1D		          neg vdot
+	   000000FF R
+ 000009E1  66| A1		          mov ax, vdot
+	   000000FF R
+ 000009E7  66| 8B 1D		          mov bx, compute_n_x
+	   000000F7 R
+ 000009EE  66| F7 EB		          imul bx
+ 000009F1  66| A3		          mov coordinate1, ax
+	   00000101 R
+ 000009F7  66| A1		          mov ax, vdot
+	   000000FF R
+ 000009FD  66| 8B 1D		          mov bx, compute_n_y
+	   000000F9 R
+ 00000A04  66| F7 EB		          imul bx
+ 00000A07  66| A3		          mov coordinate2, ax
+	   00000103 R
+ 00000A0D  66| A1		          mov ax, vdot
+	   000000FF R
+ 00000A13  66| 8B 1D		          mov bx, compute_n_z
+	   000000FB R
+ 00000A1A  66| F7 EB		          imul bx
+ 00000A1D  66| A3		          mov coordinate3, ax      
+	   00000105 R
+				          ; calculate cross_product of v and n to get u 
+				          cross_product coordinate1, coordinate2, coordinate3, compute_n_x, compute_n_y, compute_n_z, u_x, u_y, u_z      
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(352) : error A2008: syntax error : -
+ cross_product(14): Macro Called From
+  camera_template.asm(352): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(352) : error A2008: syntax error : -
+ cross_product(16): Macro Called From
+  camera_template.asm(352): Main Line Code
+				          ; calculate the vector lengths of u, v and n 
+				          vector_length u_x, u_y, u_z
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(354) : error A2008: syntax error : -
+ vector_length(1): Macro Called From
+  camera_template.asm(354): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(354) : error A2008: syntax error : -
+ vector_length(3): Macro Called From
+  camera_template.asm(354): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(354) : error A2008: syntax error : -
+ dot_product(5): Macro Called From
+  vector_length(4): Macro Called From
+   camera_template.asm(354): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(354) : error A2008: syntax error : -
+ dot_product(7): Macro Called From
+  vector_length(4): Macro Called From
+   camera_template.asm(354): Main Line Code
+ 00000AF6  66| A3			  mov length_u, ax
+	   0000010D R
+				          vector_length coordinate1, coordinate2, coordinate3
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(356) : error A2008: syntax error : -
+ vector_length(1): Macro Called From
+  camera_template.asm(356): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(356) : error A2008: syntax error : -
+ vector_length(3): Macro Called From
+  camera_template.asm(356): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(356) : error A2008: syntax error : -
+ dot_product(5): Macro Called From
+  vector_length(4): Macro Called From
+   camera_template.asm(356): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(356) : error A2008: syntax error : -
+ dot_product(7): Macro Called From
+  vector_length(4): Macro Called From
+   camera_template.asm(356): Main Line Code
+ 00000B42  66| A3		          mov length_v, ax
+	   0000010F R
+				          vector_length compute_n_x, compute_n_y, compute_n_z
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(358) : error A2008: syntax error : -
+ vector_length(1): Macro Called From
+  camera_template.asm(358): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(358) : error A2008: syntax error : -
+ vector_length(3): Macro Called From
+  camera_template.asm(358): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(358) : error A2008: syntax error : -
+ dot_product(5): Macro Called From
+  vector_length(4): Macro Called From
+   camera_template.asm(358): Main Line Code
+			     2	-----------------------------------------------------------------------------------------------
+camera_template.asm(358) : error A2008: syntax error : -
+ dot_product(7): Macro Called From
+  vector_length(4): Macro Called From
+   camera_template.asm(358): Main Line Code
+ 00000B8E  66| A3		          mov length_n, ax
+	   00000111 R
+				          
+				          
+				          output eol
+				          output eol
+				          output output_u
+				          printNormPoint display, u_x, u_y, u_z, length_u
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(365) : error A2008: syntax error : -
+ printNormPoint(11): Macro Called From
+  camera_template.asm(365): Main Line Code
+			     1	-----------------------------------------------------------------------------------------------
+camera_template.asm(365) : error A2008: syntax error : -
+ printNormPoint(13): Macro Called From
+  camera_template.asm(365): Main Line Code
+				          
+				-----------------------------------------------------------------------------------------------
+camera_template.asm(367) : error A2008: syntax error : -
+				; TO DO  // rest of the relevant statements
+				; Hint:
+
+				         ; print the rest of the points
+				-----------------------------------------------------------------------------------------------
+camera_template.asm(372) : error A2008: syntax error : -
+						  
+						  
+
+
+				        INVOKE  ExitProcess, 0  ; exit with return code 0
+
+ 00000CAA			PUBLIC _start                   ; make entry point public
+
+				END                             ; end of source code
+Microsoft (R) Macro Assembler Version 6.15.8803		    11/05/20 10:10:28
+camera_template.asm					     Symbols 2 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+atod . . . . . . . . . . . . . .	Proc
+atoi . . . . . . . . . . . . . .	Proc
+cross_product  . . . . . . . . .	Proc
+dot_product  . . . . . . . . . .	Proc
+dtoa . . . . . . . . . . . . . .	Proc
+getCoord . . . . . . . . . . . .	Proc
+get_and_display  . . . . . . . .	Proc
+inputD . . . . . . . . . . . . .	Proc
+inputW . . . . . . . . . . . . .	Proc
+input  . . . . . . . . . . . . .	Proc
+itoa . . . . . . . . . . . . . .	Proc
+outputD  . . . . . . . . . . . .	Proc
+outputW  . . . . . . . . . . . .	Proc
+output . . . . . . . . . . . . .	Proc
+point_subtract . . . . . . . . .	Proc
+point_vector_add . . . . . . . .	Proc
+printNormPoint . . . . . . . . .	Proc
+printPoint . . . . . . . . . . .	Proc
+sqrt . . . . . . . . . . . . . .	Proc
+vector_length  . . . . . . . . .	Proc
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000113 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000CAA DWord	  Public  'CODE'	
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+$$$00001 . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000CAA Private
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+CR . . . . . . . . . . . . . . .	Number	 0000000Dh   
+LF . . . . . . . . . . . . . . .	Number	 0000000Ah   
+_start . . . . . . . . . . . . .	L Near	 00000000 _TEXT	Public
+atPoint_x  . . . . . . . . . . .	Word	 000000EB _DATA	
+atPoint_y  . . . . . . . . . . .	Word	 000000ED _DATA	
+atPoint_z  . . . . . . . . . . .	Word	 000000EF _DATA	
+atodproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+atoiproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+carriage . . . . . . . . . . . .	Byte	 00000000 _DATA	
+compute_n_x  . . . . . . . . . .	Word	 000000F7 _DATA	
+compute_n_y  . . . . . . . . . .	Word	 000000F9 _DATA	
+compute_n_z  . . . . . . . . . .	Word	 000000FB _DATA	
+coordinate1  . . . . . . . . . .	Word	 00000101 _DATA	
+coordinate2  . . . . . . . . . .	Word	 00000103 _DATA	
+coordinate3  . . . . . . . . . .	Word	 00000105 _DATA	
+display  . . . . . . . . . . . .	Byte	 000000A9 _DATA	
+dtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+eol  . . . . . . . . . . . . . .	Byte	 000000E8 _DATA	
+eye_x  . . . . . . . . . . . . .	Word	 00000010 _DATA	
+eye_y  . . . . . . . . . . . . .	Word	 00000012 _DATA	
+eye_z  . . . . . . . . . . . . .	Word	 00000014 _DATA	
+eyexprompt . . . . . . . . . . .	Byte	 00000016 _DATA	
+eyeyprompt . . . . . . . . . . .	Byte	 00000047 _DATA	
+eyezprompt . . . . . . . . . . .	Byte	 00000078 _DATA	
+inproc . . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+itoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+length_n . . . . . . . . . . . .	Word	 00000111 _DATA	
+length_u . . . . . . . . . . . .	Word	 0000010D _DATA	
+length_v . . . . . . . . . . . .	Word	 0000010F _DATA	
+ndotn  . . . . . . . . . . . . .	Word	 000000FD _DATA	
+outproc  . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+output_n . . . . . . . . . . . .	Byte	 000000E4 _DATA	
+output_u . . . . . . . . . . . .	Byte	 000000DC _DATA	
+output_v . . . . . . . . . . . .	Byte	 000000E0 _DATA	
+sqrt_proc  . . . . . . . . . . .	L Near	 00000000 FLAT	External
+text . . . . . . . . . . . . . .	Byte	 00000003 _DATA	
+u_x  . . . . . . . . . . . . . .	Word	 00000107 _DATA	
+u_y  . . . . . . . . . . . . . .	Word	 00000109 _DATA	
+u_z  . . . . . . . . . . . . . .	Word	 0000010B _DATA	
+up_x . . . . . . . . . . . . . .	Word	 000000F1 _DATA	
+up_y . . . . . . . . . . . . . .	Word	 000000F3 _DATA	
+up_z . . . . . . . . . . . . . .	Word	 000000F5 _DATA	
+vdot . . . . . . . . . . . . . .	Word	 000000FF _DATA	
+
+	   0 Warnings
+	   40 Errors
